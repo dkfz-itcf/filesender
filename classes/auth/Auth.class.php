@@ -157,6 +157,9 @@ class Auth
                         }
                         self::$type = 'remote';
                     }
+                } elseif (AuthOAuth2Token::isAuthenticated()) { // OAuth2 token authentication
+                    self::$attributes = AuthOAuth2Token::attributes();
+                    self::$type = 'oauth2token';
                 } else {
                     
                     // Note that AuthSP may use the SESSION which might start_session before we do
@@ -529,6 +532,17 @@ class Auth
     public static function isSP()
     {
         return self::$type == 'sp';
+    }
+
+    /**
+     * Tells if OAuth2 token authentication is being used.
+     *
+     * @return bool
+     */
+    public static function isOAuth2Token(): bool
+    {
+        return self::$type == 'oauth2token';
+    }
     }
     
     /**
